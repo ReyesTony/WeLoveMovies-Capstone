@@ -16,11 +16,23 @@ async function read(movieId) {
 }
 
 async function reviewRead(movieId) {
-  return knex("movies as m")
-    .join("reviews as r", "r.movie_id", "m.movie_id")
-    .join("critics as c", "c.critic_id", "r.critic_id")
-    .select("r.*", "c.*")
-    .where({ "m.movie_id": movieId });
+  const reviews = await knex("reviews as r").where({ "r.movie_id": movieId });
+  const attachedCritics = await Promise.all(
+    reviews.map(async (review) => {
+      review.critic = await criticAttach(review);
+    })
+  );
+
+  return reviews;
+}
+
+async function criticAttach(review) {
+  const critic = await knex("critics as c")
+    .join("reviews as r", "r.critic_id", "c.critic_id")
+    .distinct("c.*")
+    .where({ "c.critic_id": review.critic_id });
+
+  return critic[0];
 }
 
 async function theaterRead(movieid) {

@@ -34,17 +34,6 @@ async function read(req, res) {
 async function reviewRead(req, res) {
   const { movieId } = req.params;
   const data = await service.reviewRead(movieId);
-  // console.log(data, "res");
-  const formattedData = mapProperties({
-    critic_id: "critic[0].critic_Id",
-    preferred_name: "critic[0].preferred_name",
-    surname: "critic[0].surname",
-    organization_name: "critic[0].organization_name",
-    created_at: "critic[0].created_at",
-    updated_at: "critic[0].updated_at",
-  });
-  const newData = formattedData(data);
-  // console.log(newData);
   res.json({
     data,
   });
