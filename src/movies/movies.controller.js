@@ -1,7 +1,5 @@
 const service = require("./movies.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const reduceProperties = require("../utils/reduce-properties");
-const mapProperties = require("../utils/map-properties");
 
 async function list(req, res) {
   const query = req.query.is_showing;
@@ -30,7 +28,6 @@ async function read(req, res) {
   });
 }
 
-//almost working, need to format the data map the props and keep the needed ones
 async function reviewRead(req, res) {
   const { movieId } = req.params;
   const data = await service.reviewRead(movieId);
